@@ -1,0 +1,43 @@
+{
+  "name": "skyhop-game",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "node tests/e2e/run.mjs",
+    "android:icons": "node scripts/make-android-icons.mjs",
+    "docs:banner": "node scripts/make-banner.mjs",
+    "docs:design": "node scripts/make-design-board.mjs",
+    "android:sync": "npm run build && cap sync android",
+    "android:apk": "npm run android:sync && node scripts/build-apk.mjs"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.6.0",
+    "@fontsource-variable/fredoka": "5.3.0",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/cli": "^8.6.0",
+    "@eslint/js": "^9.39.0",
+    "@types/three": "0.187.0",
+    "@vitest/coverage-v8": "5.1.0",
+    "axe-core": "^4.14.0",
+    "eslint": "^9.39.0",
+    "eslint-plugin-sonarjs": "^4.2.2",
+    "jsdom": "^25.0.1",
+    "playwright-core": "^1.64.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.1",
+    "vite": "8.3.5",
+    "vitest": "5.1.0"
+  }
+}

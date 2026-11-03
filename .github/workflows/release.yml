@@ -1,0 +1,95 @@
+name: Publish Android release
+
+# Pushing a version tag (for example v2.0.1) builds the signed APK and publishes it as a GitHub release.
+# The tag must equal "version" in package.json. README links to releases/latest/download/SkyHop.apk,
+# which always serves the newest release.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      # SHA-256 of the release signing certificate (public). The job fails if CI signs with any other key,
+      # because phones refuse to update an app that was signed with a different key.
+      EXPECTED_CERT_SHA256: e48519beddc7a8b9e7f2aa42436a4dcdead9444621aac697c54497021b5fe977
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          if ! echo "$tag" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Release tags must look like v1.2.3, got ${GITHUB_REF_NAME}."
+            exit 1
+          fi
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::Tag v$tag does not match package.json version $pkg. Bump package.json, commit, then tag."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:coverage
+
+      - name: Install Android SDK platform 36
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Restore the signing key
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Repository secret $name is missing (Settings > Secrets and variables > Actions)."
+              exit 1
+            fi
+          done
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/skyhop-release.jks"
+          {
+            echo "storeFile=$RUNNER_TEMP/skyhop-release.jks"
+            echo "storePassword=$ANDROID_KEYSTORE_PASSWORD"
+            echo "keyAlias=$ANDROID_KEY_ALIAS"
+            echo "keyPassword=$ANDROID_KEY_PASSWORD"
+          } > android/keystore.properties
+
+      - name: Build the signed APK
+        run: npm run android:apk
+
+      - name: Verify the signature
+        run: |
+          apksigner="$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -n 1)"
+          "$apksigner" verify --print-certs downloads/SkyHop.apk | tee "$RUNNER_TEMP/certs.txt"
+          if ! grep -qi "SHA-256 digest: $EXPECTED_CERT_SHA256" "$RUNNER_TEMP/certs.txt"; then
+            echo "::error::The APK was not signed with the expected SkyHop release key."
+            exit 1
+          fi
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" downloads/SkyHop.apk downloads/SkyHop.apk.sha256 \
+            --title "SkyHop ${GITHUB_REF_NAME#v}" --generate-notes

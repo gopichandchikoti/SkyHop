@@ -1,0 +1,61 @@
+# --- Dependencies and build output -------------------------------------------------------------------------------
+node_modules/
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# --- Test, coverage and tool output ------------------------------------------------------------------------------
+coverage/
+.nyc_output/
+tests/e2e/output/
+playwright-report/
+test-results/
+.eslintcache
+.vite/
+.cache/
+.parcel-cache/
+.turbo/
+
+# --- Logs --------------------------------------------------------------------------------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Environment files and secrets (never commit these) ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+android/keystore.properties
+android/local.properties
+
+# --- Built APKs: published as GitHub releases by .github/workflows/release.yml, never committed ---------------------
+downloads/
+*.apk
+*.aab
+
+# --- Android: the native project in android/ IS committed; android/.gitignore ignores its own build output --------
+
+# --- Editors and operating systems ------------------------------------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# --- Scratch ------------------------------------------------------------------------------------------------------------
+tmp/
+temp/
+*.tmp

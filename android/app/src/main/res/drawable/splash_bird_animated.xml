@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launch splash icon on Android 12+: the bird hops up and down while its wing flaps (about 0.9 s). -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/splash_bird">
+    <target
+        android:name="bird"
+        android:animation="@animator/splash_bob" />
+    <target
+        android:name="wing"
+        android:animation="@animator/splash_flap" />
+</animated-vector>

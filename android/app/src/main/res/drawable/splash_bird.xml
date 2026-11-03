@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The SkyHop bird as a vector, for the animated launch splash (Android 12+). Hand-converted from the SVG in
+  scripts/bird-art.mjs, so keep the two in step. Groups "bird" and "wing" are targets of splash_bird_animated.xml.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group android:name="bird" android:pivotX="53" android:pivotY="56">
+        <!-- crest -->
+        <path
+            android:fillColor="#2ec4b6"
+            android:pathData="M50,35 L47,24 L53,31 L55,22 L58,32 L62,25 L61,37 Z"
+            android:strokeColor="#1b1f3b"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:strokeWidth="2.6" />
+        <!-- tail: coral, teal tips (clipped), then the outline -->
+        <path
+            android:fillColor="#ff5c3a"
+            android:pathData="M34,49 L22,43 L27,53 L20,57 L27,61 L22,70 L34,64 Z" />
+        <group>
+            <clip-path android:pathData="M34,49 L22,43 L27,53 L20,57 L27,61 L22,70 L34,64 Z" />
+            <path android:fillColor="#2ec4b6" android:pathData="M0,0 H25.3 V108 H0 Z" />
+        </group>
+        <path
+            android:pathData="M34,49 L22,43 L27,53 L20,57 L27,61 L22,70 L34,64 Z"
+            android:strokeColor="#1b1f3b"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:strokeWidth="3" />
+        <!-- body and belly -->
+        <path
+            android:fillColor="#ff7a59"
+            android:pathData="M30,56 A23,23 0 1,0 76,56 A23,23 0 1,0 30,56 Z"
+            android:strokeColor="#1b1f3b"
+            android:strokeLineJoin="round"
+            android:strokeWidth="3.5" />
+        <path
+            android:fillColor="#ffe0c2"
+            android:pathData="M39,65 A12,6.5 0 1,0 63,65 A12,6.5 0 1,0 39,65 Z" />
+        <!-- wing -->
+        <group android:name="wing" android:pivotX="40" android:pivotY="56">
+            <path
+                android:fillColor="#ff5c3a"
+                android:pathData="M36,54 C40,44 56,46 58,58 C52,66 40,66 36,54 Z"
+                android:strokeColor="#1b1f3b"
+                android:strokeLineJoin="round"
+                android:strokeWidth="3" />
+        </group>
+        <!-- cheek, eye, beak -->
+        <path
+            android:fillAlpha="0.9"
+            android:fillColor="#ff8fa3"
+            android:pathData="M63.4,60 A3.6,3.6 0 1,0 70.6,60 A3.6,3.6 0 1,0 63.4,60 Z" />
+        <path
+            android:fillColor="#ffffff"
+            android:pathData="M55.5,49 A7.5,7.5 0 1,0 70.5,49 A7.5,7.5 0 1,0 55.5,49 Z"
+            android:strokeColor="#1b1f3b"
+            android:strokeLineJoin="round"
+            android:strokeWidth="2.5" />
+        <path
+            android:fillColor="#14172b"
+            android:pathData="M62.1,49 A3.4,3.4 0 1,0 68.9,49 A3.4,3.4 0 1,0 62.1,49 Z" />
+        <path
+            android:fillColor="#ffb703"
+            android:pathData="M74,55 L88,59 L74,64 Z"
+            android:strokeColor="#1b1f3b"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:strokeWidth="3" />
+    </group>
+</vector>
