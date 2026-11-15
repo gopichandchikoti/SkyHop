@@ -4,6 +4,7 @@
 
 Tap to flap, thread the bird through pipes above and below the gap, and survive **ten levels that each get harder**.
 It runs in any modern desktop or mobile browser. Open the page, tap, and you are playing.
+**Live demo:** https://sky-hop.vercel.app
 
 **Play on Android: [download the latest SkyHop.apk](https://github.com/gopichandchikoti/SkyHop/releases/latest/download/SkyHop.apk)**
 (about 3 MB, Android 7.0 or newer, offline, no ads or account). The link always gives the newest version; older ones are on
